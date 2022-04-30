@@ -32,38 +32,32 @@ const getInfoApi= async () => { // trae personajes de la Api
 
      return videoApi;
     } ;     
-    
+  const getCharTot= async () =>{
+    let newchar=await getInfoApi();// traigo todos  los  charact
+    let charbd= await Character.findAll({});  // charact de la BD
+    let aux=[];
+    aux=newchar.filter(e=> e[1]);  //saco los null 
+    let nuevo=[]; 
+    for(let i=0;i < 4 ;i++){// creo el arrray  puro  
+       nuevo = nuevo.concat(aux[i]);
+    };
+     let totalChar=nuevo.concat(charbd);// character de la API + BD
+     return totalChar;
+  }
  //###########################################################################################
 
-// router.get('/',async(req,res,next)=>{   //  listado gral  de personajes 
-//    try{
-//       let newchar=await getInfoApi();// traigo todos  los  charact
-     
-//       let aux=[];
-//       aux=newchar.filter(e=> e[1]);  //saco los null  
-      
-//       let nuevo=[];
-
-      
-
-   
-//    for(let i=0;i < 4 ;i++){// creo el arrray  puro  
-//       nuevo = nuevo.concat(aux[i]);
-//    };
-
-  
-
- 
-//     let chargetnew=nuevo.map((e)=>{ // este  es el get para mostrar los personajes en gral 
-//       return{ image:e.image,  
-//               name :e.name,}
-//      });
-              
-//       res.send(chargetnew);
-//      //res.send(newchar)
-//       }
-//      catch(error){next(error)} 
-//    });
+router.get('/',async(req,res,next)=>{   //  listado gral  de personajes 
+   try{
+    
+     let  CharTot= await getCharTot()
+    let chargetnew=CharTot.map((e)=>{ // este  es el get para mostrar los personajes en gral 
+      return{ image:e.image,  
+              name :e.name,}
+     }); 
+     res.send(chargetnew);
+    }
+     catch(error){next(error)} 
+   });
    
   
       
@@ -124,63 +118,64 @@ router.delete('/:id',async(req,res)=>{  //eliminar un personaje
 
 
 //#############################################################################################
-router.get('/',async(req,res,next)=>{  //FILTRA UN personaje POR age
-    console.log(req.query)   
-let {age} = req.query;
-if(age){       
-    try{
-      const getBdCharacter= async () => {
-     console.log
-     return await Character.findAll({where:{age:age}})
- };
- let charAge= await getBdCharacter();
-        
-     if(charAge.length === 0){
-       return  res.status(404).send('Error no existe el personaje')
-     }else{
-        //console.log('hola');
-         res.send(charAge)
-        } 
-   //res.send(charId)     
-   }
-   catch(error){
-       res.status(404).send(error);
-   }
-}})
+// router.get('/:age',async(req,res)=>{  //FILTRA UN personaje POR age
+   
+// let age=req.params.age;
+// console.log(age);
+// if(age){ 
+//     console.log('hola') ;     
+//     try{
+//       const getBdCharacter= async () => {
+     
+//      return await Character.findAll({where:{age:age}})
+//  };
+//  let charAge= await getBdCharacter();
+//   console.log(charAge);      
+//      if(charAge.length === 0){
+//        return  res.status(404).send('Error no existe el personaje')
+//      }else{
+//         //console.log('hola');
+//          res.send(charAge)
+//         } 
+//    //res.send(charId)     
+//    }
+//    catch(error){
+//        res.status(404).send(error);
+//    }
+// }})
 
 //######################################################################################################
-router.get('/',async(req,res,next)=>{  //FILTRA UN personaje POR name
-    console.log(req.query)
-    let {name} = req.query;
-    if(name){       
-       try{
-         const getBdCharacter= async () => {
-        console.log
-        return await Character.findAll({where:{name:name}
-        })
-    };
-    let charName= await getBdCharacter();
+// router.get('/:name',async(req,res)=>{  //FILTRA UN personaje POR name
+//     console.log(req.params.name)
+//     let name=req.params.name;
+//     if(name){       
+//        try{
+//          const getBdCharacter= async () => {
+//               return await Character.findAll({where:{name:name}
+//         })
+//     };
+//     let charName= await getBdCharacter();
            
-        if(charName.length === 0){
-          return  res.status(404).send('Error no existe el personaje')
-        }else{
-           //console.log('hola');
-            res.send(charName)
-           } 
+//         if(charName.length === 0){
+//           return  res.status(404).send('Error no existe el personaje')
+//         }else{
+//            //console.log('hola');
+//             res.send(charName)
+//            } 
         
            
-       }
-       catch(error){
-           res.status(404).send(error);
-       }
-    }})
+//        }
+//        catch(error){
+//            res.status(404).send(error);
+//        }
+//     }})
 
 //#############################################################################################
 
 
-router.get('/',async(req,res)=>{  //FILTRA UN personaje POR weigth
+router.get('/:weight',async(req,res)=>{  //FILTRA UN personaje POR weigth
     
-    let {weight}=req.query;
+    let {weight}=req.params;
     if(weight){       
         try{
           const getBdCharacter= async () => {

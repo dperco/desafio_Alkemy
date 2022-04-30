@@ -1,44 +1,10 @@
 const { Router } = require('express');
-const {Character,Generes,Movies}=require('../db');
-const {Op, BOOLEAN}=require('sequelize');
+const {Character,Gener,Movies}=require('../db');
+const {Op}=require('sequelize');
 const router = Router();
 const axios = require('axios');
 
-// const bodyParser = require('body-parser');
 
-
-// var jsonParser = bodyParser.json()
- 
-// // create application/x-www-form-urlencoded parser
-// var urlencodedParser = bodyParser.urlencoded({ extended: false })
- 
-// // POST /login gets urlencoded bodies
-// router.post('/', urlencodedParser, function (req, res) {
-//   res.send('welcome, ' + req.body.image)
-//   res.send('welcome, ' + req.body.id)
-//   res.send('welcome, ' + req.body.name)
-//   res.send('welcome, ' + req.body.age)
-//   res.send('welcome, ' + req.body.weight)
-//   res.send('welcome, ' + req.body.history)
-//   res.send('welcome, ' + req.body.pict_asoc)
-//   res.send('welcome, ' + req.body.tv_asoc)
-// })
-// // POST /api/users gets JSON bodies
-// router.post('/', jsonParser, function (req, res) {
-//   // create user in req.body
-//   let newpost= Character.create(
-//    { 
-//            image,
-//            id,
-//            name,  
-//            age,
-//            weight, 
-//            history,   
-//            pict_asoc, 
-//            tv_asoc
-// })
-// res.send(newpost)
-// })
 
 
 // const getInfoApi= async () => { 
@@ -68,66 +34,33 @@ const axios = require('axios');
     
  
 
-// router.get('/',async(req,res,next)=>{
-//    try{
-//       let newchar=await getInfoApi();// traigo todos  los  charact
-     
-//       let aux=[];
-//       aux=newchar.filter(e=> e[1]);  //saco los null  
-      
-//       let nuevo=[];
-
-      
-
-   
-//    for(let i=0;i < 4 ;i++){// creo el arrray  puro  
-//       nuevo = nuevo.concat(aux[i]);
-//    };
-
-  
-
- 
-//     let chargetnew=nuevo.map((e)=>{ // este  es el get para mostrar los personajes
-//       return{ image:e.image,  
-//               name :e.name,}
-//      });
+router.get('/',async(req,res)=>{
+   try{
+      let totgener= await Gener.findAll({});
               
-//       res.send(chargetnew);
-//      //res.send(nuevo)
-//       }
-//      catch(error){next(error)} 
-//    });
+      //res.send('hola');
+     res.send(totgener)
+      }
+     catch(error){console.log(error)} 
+   });
    
-  
-      
-       
+//###################################################################################################3  
+        
 
-    
-    
-// // //para el post
-// // router.post('/',async(res,req)=>{
-  
-// //  try{
-// //    let charact=await getInfoApi();
-// //    console.log(req.body);
-// //    const {image,id,name,pict_asoc,tv_asoc}=req.body;
+ router.post('/', function(req, res) {
+    console.log(req.body);
+    const {name,image,pict_asociat,tv_asoc}=req.body;
      
-// //     let newchar= await Character.create(
-// //        { 
-// //                image:image,
-// //                id:id,
-// //                name:name,  
-// //                age:'',
-// //                weight:'', 
-// //                history:'',   
-// //                pict_asoc: pict_asoc, 
-// //                tv_asoc:tv_asoc
-// //     })
-    
-// //     res.send(newchar());
-// //    }
-// //    catch(error){console.log(error)} 
-// //    })
+    let newchar=  Gener.create(
+          {   
+               name, 
+               image,  
+               pict_asociat, 
+               tv_asoc
+         })
+
+    res.status(200).send({message:'Producto se ha recibido'});
+  });
 
 
 module.exports = router;
