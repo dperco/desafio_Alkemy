@@ -118,57 +118,57 @@ router.delete('/:id',async(req,res)=>{  //eliminar un personaje
 
 
 //#############################################################################################
-// router.get('/:age',async(req,res)=>{  //FILTRA UN personaje POR age
+router.get('/:age',async(req,res)=>{  //FILTRA UN personaje POR age
    
-// let age=req.params.age;
-// console.log(age);
-// if(age){ 
-//     console.log('hola') ;     
-//     try{
-//       const getBdCharacter= async () => {
+let age=req.params.age;
+console.log(age);
+if(age){ 
+    console.log('hola') ;     
+    try{
+      const getBdCharacter= async () => {
      
-//      return await Character.findAll({where:{age:age}})
-//  };
-//  let charAge= await getBdCharacter();
-//   console.log(charAge);      
-//      if(charAge.length === 0){
-//        return  res.status(404).send('Error no existe el personaje')
-//      }else{
-//         //console.log('hola');
-//          res.send(charAge)
-//         } 
-//    //res.send(charId)     
-//    }
-//    catch(error){
-//        res.status(404).send(error);
-//    }
-// }})
+     return await Character.findAll({where:{age:age}})
+ };
+ let charAge= await getBdCharacter();
+  console.log(charAge);      
+     if(charAge.length === 0){
+       return  res.status(404).send('Error no existe el personaje')
+     }else{
+        //console.log('hola');
+         res.send(charAge)
+        } 
+   //res.send(charId)     
+   }
+   catch(error){
+       res.status(404).send(error);
+   }
+}})
 
 //######################################################################################################
-// router.get('/:name',async(req,res)=>{  //FILTRA UN personaje POR name
-//     console.log(req.params.name)
-//     let name=req.params.name;
-//     if(name){       
-//        try{
-//          const getBdCharacter= async () => {
-//               return await Character.findAll({where:{name:name}
-//         })
-//     };
-//     let charName= await getBdCharacter();
+router.get('/:name',async(req,res)=>{  //FILTRA UN personaje POR name
+    console.log(req.params.name)
+    let name=req.params.name;
+    if(name){       
+       try{
+         const getBdCharacter= async () => {
+              return await Character.findAll({where:{name:name}
+        })
+    };
+    let charName= await getBdCharacter();
            
-//         if(charName.length === 0){
-//           return  res.status(404).send('Error no existe el personaje')
-//         }else{
-//            //console.log('hola');
-//             res.send(charName)
-//            } 
+        if(charName.length === 0){
+          return  res.status(404).send('Error no existe el personaje')
+        }else{
+           //console.log('hola');
+            res.send(charName)
+           } 
         
            
-//        }
-//        catch(error){
-//            res.status(404).send(error);
-//        }
-//     }})
+       }
+       catch(error){
+           res.status(404).send(error);
+       }
+    }})
 
 //#############################################################################################
 

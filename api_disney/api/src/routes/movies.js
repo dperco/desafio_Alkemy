@@ -106,58 +106,58 @@ router.delete('/:id',async(req,res)=>{  //eliminar un MOVIE
 })
 
 //#####################################################################################
-// router.get('/:title',async(req,res)=>{  //FILTRA UN movie POR titulo
-//     console.log(req.params.title)
-//     let title= req.params.title;
-//     if(title){       
-//        try{
-//          const getBdMovie= async () => {
-//         //console.log
-//            return await Movies.findAll({where:{title:title}
-//         })
-//                };
-//         let movieName= await getBdMovie();
-//            console.log(movieName)
-//         if(movieName.length === 0){
-//           return  res.status(404).send('Error no existe el movie')
-//         }else{
-//            //console.log('hola');
-//             res.send(movieName)
-//            } 
+router.get('/:title',async(req,res)=>{  //FILTRA UN movie POR titulo
+    console.log(req.params.title)
+    let title= req.params.title;
+    if(title){       
+       try{
+         const getBdMovie= async () => {
+        //console.log
+           return await Movies.findAll({where:{title:title}
+        })
+               };
+        let movieName= await getBdMovie();
+           console.log(movieName)
+        if(movieName.length === 0){
+          return  res.status(404).send('Error no existe el movie')
+        }else{
+           //console.log('hola');
+            res.send(movieName)
+           } 
         
            
-//        }
-//        catch(error){
-//            res.status(404).send(error);
-//        }
-//     }})
+       }
+       catch(error){
+           res.status(404).send(error);
+       }
+    }})
 
 //#############################################################################
-// router.get('/:Genero',async(req,res)=>{  //FILTRA UN movie POR genero
-//     console.log(req.params.Genero);
-//     let Genero= req.params.Genero;
-//     if(Genero){       
-//        try{
-//          const getBdGenero= async () => {
-//         //console.log
-//            return await Gener.findAll({where:{name:Genero}
-//         })
-//                };
-//         let movieGener= await getBdGenero();
-//            console.log('hola');
-//         if(movieGener.length === 0){
-//           return  res.status(404).send('Error no existe el genero')
-//         }else{
-//            //console.log('hola');
-//             res.send(movieGener)
-//            } 
+router.get('/:Genero',async(req,res)=>{  //FILTRA UN movie POR genero
+    console.log(req.params.Genero);
+    let Genero= req.params.Genero;
+    if(Genero){       
+       try{
+         const getBdGenero= async () => {
+        //console.log
+           return await Gener.findAll({where:{name:Genero}
+        })
+               };
+        let movieGener= await getBdGenero();
+           console.log('hola');
+        if(movieGener.length === 0){
+          return  res.status(404).send('Error no existe el genero')
+        }else{
+           //console.log('hola');
+            res.send(movieGener)
+           } 
         
            
-//        }
-//        catch(error){
-//            res.status(404).send(error);
-//        }
-//     }})
+       }
+       catch(error){
+           res.status(404).send(error);
+       }
+    }})
 //#############################################################################################
 
 router.get('/:term',async(req,res)=>{  //FILTRA UN movie POR genero
