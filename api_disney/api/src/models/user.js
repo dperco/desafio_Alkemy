@@ -11,12 +11,19 @@ module.exports = (sequelize) => {
         autoIncrement:true
       },
     
-    username: {type:DataTypes.STRING},
-    email:{type:DataTypes.STRING},
-    password:{type:DataTypes.STRING(150)}
-  
- 
+    username: {type:DataTypes.STRING,
+               
+              },
 
+    email:{type:DataTypes.STRING,
+          
+    },
+
+    password:{type:DataTypes.STRING,
+      
+           
+    }
+  
   },
   {timestamps:false},
   {freezeTableName:true,}

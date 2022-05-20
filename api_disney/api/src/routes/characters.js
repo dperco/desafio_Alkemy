@@ -35,6 +35,7 @@ const getInfoApi= async () => { // trae personajes de la Api
   const getCharTot= async () =>{
     let newchar=await getInfoApi();// traigo todos  los  charact
     let charbd= await Character.findAll({});  // charact de la BD
+    //console.log(charbd);
     let aux=[];
     aux=newchar.filter(e=> e[1]);  //saco los null 
     let nuevo=[]; 
@@ -48,19 +49,90 @@ const getInfoApi= async () => { // trae personajes de la Api
 
 router.get('/',async(req,res,next)=>{   //  listado gral  de personajes 
    try{
-    
-     let  CharTot= await getCharTot()
-    let chargetnew=CharTot.map((e)=>{ // este  es el get para mostrar los personajes en gral 
-      return{ image:e.image,  
-              name :e.name,}
+     let name=req.query.name;
+    // console.log(name);
+     let  CharTot= await getCharTot();
+     let chargetnew=CharTot.map((e)=>{ // este  es el get para mostrar los personajes en gral 
+      return{ 
+              image:e.image,  
+              name :e.name,
+              edad: e.age,
+              id:e.id,
+              iddb: e.iddb
+            }
      }); 
-     res.send(chargetnew);
+///////////////////////////########################query por name 
+     if(name){
+             const getBdCharacter= async () => {
+                      return await Character.findAll({where:{name:name}
+                                  })
+                         };
+                   let charName= await getBdCharacter();
+                  // console.log(charName);
+                    if(charName.length === 0){
+                           return  res.status(404).send('Error no existe el personaje')
+                         }else{
+                  // console.log('hola');
+                              res.send(charName)
+                        } 
+
+     };
+     /////////////////////////////#################### query por edad
+     let age=req.query.age; 
+     if(age){
+             const getBdCharacter= async () => {
+                      return await Character.findAll({where:{age:age}
+                    })
+                 };
+              let charAge= await getBdCharacter();
+                  // console.log(charAge);
+                if(charAge.length === 0){
+                    return  res.status(404).send('Error no existe el personaje')
+                   }else{
+                  // console.log('hola');
+                res.send(charAge)
+                   }       
+      }
+   ////////////////////////############################### query por idMovie
+
+
+     let movies=req.query.movies;
+     console.log(movies)
+      if (movies){
+         console.log('hola')
+         // const getBdMovie= async () => {
+         //    //console.log
+         //       let info= await Movies.findAll({});
+         //       return info.data
+         //    };
+         let movieId= await Movies.findAll({});
+         movieId=movieId.filter(e=>e.id == movies);
+         let actor = movieId[0].char_asoc;
+         console.log(actor);
+        // movieId= movieId.filter(e => e.id == movies);
+         
+         
+         
+
+         if(!movieId){
+            return res.status(404).send('no hay character')
+         }else{
+        // res.send(movieId);
+        //  res.send('en esta pelicula trabaja');
+          res.send(actor);
+          }
+      }
+      else{
+            res.send(chargetnew); 
+          }
+
+   ////////////////////////////////////////////////////////////////////////////
+      
+   //res.send(chargetnew);  
     }
      catch(error){next(error)} 
-   });
-   
-  
-      
+   })
+
 //###############################################################################################       
 
     
@@ -90,12 +162,9 @@ router.post('/',function(req,res){   //crear un personaje
     res.status(200).send({message:'personaje creado'});
    }
    catch(error){console.log(error)} 
-   })
+   });
 
-// router.post('/', function(req, res) {
-//     console.log(req.body);
-//     res.status(200).send({message:'Producto se ha recibido'});
-//   });
+
 
 ///##############################################################################################
 router.put('/:id',async(req,res)=>{   //modificar un personaje
@@ -114,88 +183,13 @@ router.delete('/:id',async(req,res)=>{  //eliminar un personaje
     })
     res.send({message:'personaje eliminado'});
     
-})
+});
 
 
 //#############################################################################################
-router.get('/:age',async(req,res)=>{  //FILTRA UN personaje POR age
-   
-let age=req.params.age;
-console.log(age);
-if(age){ 
-    console.log('hola') ;     
-    try{
-      const getBdCharacter= async () => {
-     
-     return await Character.findAll({where:{age:age}})
- };
- let charAge= await getBdCharacter();
-  console.log(charAge);      
-     if(charAge.length === 0){
-       return  res.status(404).send('Error no existe el personaje')
-     }else{
-        //console.log('hola');
-         res.send(charAge)
-        } 
-   //res.send(charId)     
-   }
-   catch(error){
-       res.status(404).send(error);
-   }
-}})
-
-//######################################################################################################
-router.get('/:name',async(req,res)=>{  //FILTRA UN personaje POR name
-    console.log(req.params.name)
-    let name=req.params.name;
-    if(name){       
-       try{
-         const getBdCharacter= async () => {
-              return await Character.findAll({where:{name:name}
-        })
-    };
-    let charName= await getBdCharacter();
-           
-        if(charName.length === 0){
-          return  res.status(404).send('Error no existe el personaje')
-        }else{
-           //console.log('hola');
-            res.send(charName)
-           } 
-        
-           
-       }
-       catch(error){
-           res.status(404).send(error);
-       }
-    }})
-
-//#############################################################################################
 
 
-router.get('/:weight',async(req,res)=>{  //FILTRA UN personaje POR weigth
-    
-    let {weight}=req.params;
-    if(weight){       
-        try{
-          const getBdCharacter= async () => {
-                return await Character.findAll({where:{weight:weight}
-                 })
-          };
-          let charWeight= await getBdCharacter();
-            
-          if(charWeight.length === 0){
-             return  res.status(404).send('Error no existe el personaje')
-         }else{
-            //console.log('hola');
-             res.send(charWeight)
-            } 
-            
-        } 
-        catch(error){
-           res.status(404).send(error);
-       }
-    }})
+
 
 
 module.exports = router; 

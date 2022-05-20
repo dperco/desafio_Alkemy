@@ -34,12 +34,16 @@ const axios = require('axios');
     
  
 
-router.get('/',async(req,res)=>{
+router.get('/',async(req,res)=>{  //trae todos los generos 
    try{
-      let totgener= await Gener.findAll({});
-              
+      let totgener= await Gener.findAll({where:{}});
+      let id=req.query.id;
+      if(id){
+            let filter=totgener.filter(e=> e.id === id);  //trae los generes por query
+            res.send(filter)
+      }else{       
       //res.send('hola');
-     res.send(totgener)
+          res.send(totgener)}
       }
      catch(error){console.log(error)} 
    });
@@ -54,13 +58,39 @@ router.get('/',async(req,res)=>{
     let newchar=  Gener.create(
           {   
                name, 
-               image,  
+               image,    
                pict_asociat, 
-               tv_asoc
+               tv_asoc 
          })
 
     res.status(200).send({message:'Producto se ha recibido'});
   });
+/////////#######################################################################################
 
+//   router.get('/',async(req,res)=>{  //FILTRA UN movie POR  genero
+//    console.log(req.query.id) 
+//    let id= req.query.id;
+//    if(id){ 
+//       // console.log('hola')      
+//       try{
+//         const getBdGenero= async () => {
+//        //console.log
+//           return await Gener.findAll({where:{id:id}})
+//               };
+//        let movieGener= await getBdGenero();
+//           //console.log('hola');
+//        if(movieGener.length === 0){
+//          return  res.status(404).send('Error no existe el genero')
+//        }else{
+//           //console.log('hola');
+//            res.send(movieGener)
+//           } 
+       
+          
+//       }
+//       catch(error){
+//           res.status(404).send(error);
+//       }
+//    }})
 
 module.exports = router;

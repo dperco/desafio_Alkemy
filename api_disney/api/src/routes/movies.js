@@ -45,19 +45,91 @@ const getInfoApi= async () => { //trae info de la Api
 //###########################################################################################
 router.get('/',async(req,res,next)=>{
    try{
-    let nuevo= await getCharTot(); 
+    let nuevo= await Movies.findAll(); 
+    let term=req.query.term;
+    let title=req.query.title;
+    let genre=req.query.genre;
+    console.log(genre);
     let chargetnew=nuevo.map((e)=>{ // este  es el get para mostrar las peliculas
       return{ 
+                id:e.id,
                 image:e.image,  
-                pict_asoc:e.pict_asoc,
-                tv_asoc:e.tv_asoc}
-     });
-      //res.send(aux);      
-      res.send(chargetnew);
-     //res.send(nuevo)
+                date:e.date
+                
+     }});
+
+     if(!term && !title && !genre){return res.send(chargetnew)};
+    //  ///################################## muestra  peli x tit/name query
+
+     if(title){
+        const getBdMovie= async () => {
+            //console.log
+               return await Movies.findAll({where:{title:title}
+            })};
+            let movieName= await getBdMovie();
+           // console.log(movieName)
+         if(movieName.length === 0){
+           return  res.status(404).send('Error no existe el movie')
+         }else{
+            //console.log('hola');
+            return  res.send(movieName)
+            }  
+
+     }
+     //else{return res.send(chargetnew)};
+
+// ////////////################################################# Peliculas ,query por id genero
+    
+     if(genre){
+         console.log('hola');
+         let generos= await Gener.findAll({});
+         generos=generos.filter(e=>e.name == genre)
+       
+         return res.send(generos)
+     }
+          
+   
+//      //////////############################# ordena pelic por query
+//      
+     if(term){
+        const getBdterm= async () => {
+            //console.log
+               return await Movies.findAll({})
+                   };
+        let movieterm= await getBdterm();
+    //     console.log(movieterm);
+    //     console.log(term);
+        if(term === 'DESC'){ 
+              //movieterm=movieterm.filter(e=>e.id);
+              movieterm= movieterm.sort(function(a,b){
+                                if(a.date > b.date){
+                                    return -1;
+                                }
+                                if(b.date > a.date){
+                                    return 1;
+                                }
+                                return 0;
+                            }) 
+              
+        }else{
+            movieterm=  movieterm.sort(function(a,b){
+                              if(a.date> b.date){
+                                return 1;
+                               }
+                               if(b.date > a.date){
+                                return -1;
+                               }
+                               return 0;    
+                               });
+            
+        } 
+            return res.send(movieterm);
+         }
+    
+      
       }
      catch(error){next(error)} 
-   });
+    });
 //##############################################################################################
   
       //para el post
@@ -74,9 +146,9 @@ router.post('/',function(req,res){   //crear una pelicula
            image,
            title,
            date,
-           rating,
-           char_asoc     
-                  
+           rating,  
+           char_asoc  
+                        
        })
        
        res.status(200).send({message:'movie creado'});
@@ -103,109 +175,10 @@ router.delete('/:id',async(req,res)=>{  //eliminar un MOVIE
     })
     res.send({message:'MOVIE eliminado'});
     
-})
+});
 
-//#####################################################################################
-router.get('/:title',async(req,res)=>{  //FILTRA UN movie POR titulo
-    console.log(req.params.title)
-    let title= req.params.title;
-    if(title){       
-       try{
-         const getBdMovie= async () => {
-        //console.log
-           return await Movies.findAll({where:{title:title}
-        })
-               };
-        let movieName= await getBdMovie();
-           console.log(movieName)
-        if(movieName.length === 0){
-          return  res.status(404).send('Error no existe el movie')
-        }else{
-           //console.log('hola');
-            res.send(movieName)
-           } 
-        
-           
-       }
-       catch(error){
-           res.status(404).send(error);
-       }
-    }})
 
-//#############################################################################
-router.get('/:Genero',async(req,res)=>{  //FILTRA UN movie POR genero
-    console.log(req.params.Genero);
-    let Genero= req.params.Genero;
-    if(Genero){       
-       try{
-         const getBdGenero= async () => {
-        //console.log
-           return await Gener.findAll({where:{name:Genero}
-        })
-               };
-        let movieGener= await getBdGenero();
-           console.log('hola');
-        if(movieGener.length === 0){
-          return  res.status(404).send('Error no existe el genero')
-        }else{
-           //console.log('hola');
-            res.send(movieGener)
-           } 
-        
-           
-       }
-       catch(error){
-           res.status(404).send(error);
-       }
-    }})
-//#############################################################################################
 
-router.get('/:term',async(req,res)=>{  //FILTRA UN movie POR genero
-    console.log(req.params.term);
-    let term= req.params.term;
-          
-       try{
-         const getBdterm= async () => {
-        //console.log
-           return await Movies.findAll({})
-               };
-        let movieterm= await getBdterm();
-        if(term === 'ASC'){
-           console.log('hola');
-             movieterm=  movieterm.sort(function(a,b){
-              if(a.id > b.id){
-                return 1;
-               }
-               if(b.id > a.id){
-                return -1;
-               }
-               return 0;    
-               })
-        } else{
-            movieterm= movieterm.sort(function(a,b){
-                if(a.id > b.id){
-                    return -1;
-                }
-                if(b.id > a.id){
-                    return 1;
-                }
-                return 0;
-            }) 
-        }  
-       
-        if(movieterm.length === 0){
-          return  res.status(404).send('Error no existe el genero')
-        }else{
-           //console.log('hola');
-            res.send(movieterm)
-           } 
-        
-          
-       }
-       catch(error){
-           res.status(404).send(error);
-       }
-    })
 
 
 module.exports = router;
