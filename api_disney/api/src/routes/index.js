@@ -15,7 +15,7 @@ const router = Router();
 router.use('/characters',middleware.checkToken,charactersRouter);
 router.use('/movies',middleware.checkToken,moviesRouter);
 router.use('/genres',generesRouter);
-router.use('/auth/',userRouter);
+router.use('/auth/',userRouter); 
 
 
 
